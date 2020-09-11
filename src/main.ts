@@ -5,13 +5,7 @@ import { AppModule } from './app.module';
 
 import env from './env';
 
-console.log({
-	"process.env": {
-		PORT: process.env.PORT,
-		HOST: process.env.HOST
-	},
-	env: env
-})
+console.log({ env })
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);

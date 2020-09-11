@@ -1,8 +1,10 @@
 import { Controller, Post, Body, BadRequestException, Headers, Get, UnauthorizedException } from '@nestjs/common';
 import { SignInDto } from 'src/dto/signin.dto';
 import { UserService } from 'src/database/user/user.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from 'src/auth/auth/auth.service';
 import { SignUpDto } from 'src/dto/signup.dto';
+import { Protected } from 'src/decorators/protected.decorator';
+import { Id } from 'src/decorators/id.decorator';
 
 @Controller('user')
 export class UserController {
@@ -28,16 +30,10 @@ export class UserController {
 	}
 
 	@Get('profile')
-	async profile(@Headers('Authorization') auth: string): Promise<{ email: string, first_name: string, last_name: string }> {
-		if(!auth) throw new UnauthorizedException();
-		if(!auth.includes("Token")) throw new UnauthorizedException();
-		const token = auth.split(" ")[1];
+	@Protected()
+	async profile(@Id() id: string): Promise<{ email: string, first_name: string, last_name: string }> {
 
-		const res = this.auth.verify(token);
-
-		if(!res) throw new UnauthorizedException();
-
-		const user = await this.user.getUserById(res.id);
+		const user = await this.user.getUserById(id);
 
 		if(!user) throw new UnauthorizedException();
 
