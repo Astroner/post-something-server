@@ -48,6 +48,8 @@ type responseType = {
 }
 ```
 ###### GET posts/
+Request query params: 
+ - page - type number
 ```typescript
 type responseType = {
   page: number
